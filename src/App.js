@@ -2,6 +2,7 @@ import React, { useReducer, createContext, useContext } from "react";
 import "./App.css";
 
 const Avatar = ({ state, dispatch }) => {
+  console.log("Avatar");
   return (
     <>
       <div onClick={() => dispatch({ type: "CHANGE_USER", value: "CuiRan" })}>
@@ -15,6 +16,7 @@ const Avatar = ({ state, dispatch }) => {
 };
 
 const User = () => {
+  console.log("User");
   const { state, dispatch } = useContext(UserContext);
   return <Avatar state={state} dispatch={dispatch} />;
 };
