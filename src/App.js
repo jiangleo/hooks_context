@@ -1,26 +1,71 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer, createContext, useContext } from "react";
+import "./App.css";
 
-function App() {
+const Avatar = ({ state, dispatch }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div onClick={() => dispatch({ type: "CHANGE_USER", value: "CuiRan" })}>
+        {state.user}
+      </div>
+      <div onClick={() => dispatch({ type: "CHANGE_AGE", value: 17 })}>
+        {state.age}
+      </div>
+    </>
   );
-}
+};
+
+const User = () => {
+  const { state, dispatch } = useContext(UserContext);
+  return <Avatar state={state} dispatch={dispatch} />;
+};
+
+const NavigationBar = () => {
+  console.log("NavigationBar");
+  return <User />;
+};
+
+const PageLayout = () => {
+  console.log("PageLayout");
+  return <NavigationBar />;
+};
+
+const Page = () => {
+  console.log("Page");
+  return <PageLayout />;
+};
+
+const UserContext = createContext();
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE_USER":
+      return { ...state, user: action.value };
+    case "CHANGE_AGE":
+      return { ...state, age: action.value };
+    default:
+      return state;
+  }
+};
+
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, { user: "崔然", age: 18 });
+
+  return (
+    <UserContext.Provider
+      value={{
+        state: state,
+        dispatch: dispatch
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+const App = () => (
+  <AppProvider>
+    <Page />
+  </AppProvider>
+);
 
 export default App;
